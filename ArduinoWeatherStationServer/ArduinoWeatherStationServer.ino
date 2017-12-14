@@ -37,9 +37,22 @@ EthernetServer server(DATA_PORT);
 EthernetClient client;
 EthernetUDP Udp;
 
-byte node[][4] = {{0, 0, 0, 0}};
+byte node[][4] = {{192,168,137,161}};
 
 LiquidCrystal_I2C lcd(0x38, 20, 4);
+
+byte state = 1;
+//state vars
+//error     0000 0000 000
+//idle      0000 0001 001
+//query     0000 0010 002
+//running   0000 0100 004
+//updating  0000 1000 008
+//data vars
+//temp      0001 0000 016
+//humidity  0010 0000 032
+//light     0100 0000 064
+//undefined 1000 0000 128
 
 
 void setup() {
@@ -76,28 +89,25 @@ void setup() {
 
 }
 
+//note: twitter every 30mins
 
 void loop() {
   tickClock();
   updateClockDisplay();
 
-  if (((timeM % 30 == 0) && timeS == 0) && false) {
-    //30 mins twitter
-  }
-
-  if ((true || timeM % 5 == 0) && timeS == 0 && false )
-  {
-    for (int i = 0; i < 2; i++)
-      if (client.connect(IPAddress(node[i][0], node[i][1], node[i][2], node[i][3]), 80)) {
-        Serial.println("connected");
-        client.println("REQ STATUS");
-        do {
-          char c = client.read();
-          Serial.print(c);
-          delay(10);
-        } while (client.available());
-      }
-  }
+  //if ((true || timeM % 5 == 0) && timeS == 0 && false )
+  //{
+    //for (int i = 0; i < 2; i++)
+      //if (client.connect(IPAddress(node[i][0], node[i][1], node[i][2], node[i][3]), 80)) {
+        //Serial.println("connected");
+        //client.println("REQ STATUS");
+        //do {
+          //char c = client.read();
+          //Serial.print(c);
+          //delay(10);
+        //} //while (client.available());
+      //}
+  //}
 
   //curFile = SD.open("test.txt", FILE_WRITE);
   //if (curFile) {
@@ -107,21 +117,10 @@ void loop() {
   //   Serial.println("error opening test.txt");
   // }
 
-  if (client) {
-    client.stop();
-    Serial.println("client disconnected");
-  }
-
-  // if (client.connect(timeserver, DATA_PORT)) {
-  //   Serial.println("connected");
-  //   // Make a HTTP request:
-  //   client.println("GET /search?q=arduino HTTP/1.0");
-  //   client.println();
-  // }
-  // else {
-  //   // kf you didn't get a connection to the server:
-  //   //Serial.println("connection failed");
-  // }
+  //if (client) {
+  //  client.stop();
+  //  //Serial.println("client disconnected");
+  //}
 }
 
 void updateClockDisplay() {
@@ -190,7 +189,7 @@ void correctTime() {
   unsigned long lowWord = word(packetBuffer[42], packetBuffer[43]);
   unsigned long timeNTP = highWord << 16 | lowWord;
   Udp.stop();
-  Serial.println(timeNTP);
+  //Serial.println(timeNTP);
   timeH = (timeNTP / 3600) % 24;
   timeM = (timeNTP / 60) % 60;
   timeS = (timeNTP % 60);
