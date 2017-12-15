@@ -3,10 +3,12 @@
 #include <Adafruit_Sensor.h>
 #include <LiquidCrystal_I2C.h>
 
-#define DHTPIN 2
-#define DHTTYPE DHT11
 
-DHT dht(DHTPIN, DHTTYPE);
+#define LSV_PIN 3
+#define DHT_PIN 2
+#define DHT_TYPE DHT11
+
+DHT dht(DHT_PIN, DHT_TYPE);
 LiquidCrystal_I2C lcd(0x38, 16, 2);
 
 const byte STAT_MASK = 15;
@@ -37,9 +39,11 @@ short rawBrightness;
 void setup() {
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
+  //setup wifi
   while (!Serial);
+  //setup dht
   dht.begin();
-
+  //setup lcd
   lcd.init();
   lcd.backlight();
 }
@@ -57,6 +61,7 @@ void loop() {
       //update raw values
       rawTemperature = dht.readTemperature();
       rawHumidity = dht.readHumidity();
+      rawBrightness = analogRead(LSV_PIN);
 
       //update display
       lcd.clear();
@@ -67,13 +72,13 @@ void loop() {
       lcd.print(F("HUMI: "));
       lcd.print(rawHumidity);
       //lcd.println(brightness);
-      delay(500);
+      delay(250);
       break;
     case 2:
       //receiving
       input = "";
       while (!(Serial.peek() == '\r' || Serial.peek() == '\n')) {
-        if (((Serial.peek() != -1) && !(Serial.peek() == '\r' || Serial.peek() == '\n')) and (ram()>256))//leak protection
+        if (((Serial.peek() != -1) && !(Serial.peek() == '\r' || Serial.peek() == '\n')) and (ram() > 256)) //leak protection
           input = input + (char)Serial.read();
       }
       while (Serial.peek() == '\r' || Serial.peek() == '\n') {
@@ -116,7 +121,7 @@ void loop() {
           break;
         case 64:
           //light
-          msgBrightness = 0;
+          msgBrightness = rawBrightness;
           state = (state & DATA_MASK) | 8;
           break;
         case 128:
@@ -175,11 +180,11 @@ void loop() {
   }
 }
 
-int ram(){
-  extern int __heap_start, *__brkval; 
-  int v; 
+int ram() {
+  extern int __heap_start, *__brkval;
+  int v;
   //Serial.print(F("RAM:\t"));
-  //Serial.print((int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval)); 
+  //Serial.print((int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval));
   //Serial.println(F(" b"));
   return ((int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval));
 }
