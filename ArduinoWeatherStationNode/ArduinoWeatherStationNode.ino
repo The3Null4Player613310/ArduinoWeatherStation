@@ -26,9 +26,12 @@ byte state = 1;
 
 String input = "";
 String output = "";
-double temperature;
-double humidity;
-double brightness;
+short msgTemperature;
+short msgHumidity;
+short msgBrightness;
+short rawTemperature;
+short rawHumidity;
+short rawBrightness;
 
 
 void setup() {
@@ -50,13 +53,19 @@ void loop() {
       //idle
       if (Serial.available() > 0)
         state = (state & DATA_MASK) | 2;
+
+      //update raw values
+      rawTemperature = dht.readTemperature();
+      rawHumidity = dht.readHumidity();
+
+      //update display
       lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print(F("TEMP: "));
-      lcd.print(temperature);
+      lcd.print(rawTemperature);
       lcd.setCursor(0, 1);
       lcd.print(F("HUMI: "));
-      lcd.print(humidity);
+      lcd.print(rawHumidity);
       //lcd.println(brightness);
       delay(500);
       break;
@@ -64,7 +73,7 @@ void loop() {
       //receiving
       input = "";
       while (!(Serial.peek() == '\r' || Serial.peek() == '\n')) {
-        if ((Serial.peek() != -1) && !(Serial.peek() == '\r' || Serial.peek() == '\n'))
+        if (((Serial.peek() != -1) && !(Serial.peek() == '\r' || Serial.peek() == '\n')) and (ram()>64))
           input = input + (char)Serial.read();
       }
       while (Serial.peek() == '\r' || Serial.peek() == '\n') {
@@ -97,17 +106,17 @@ void loop() {
       switch (state & DATA_MASK) {
         case 16:
           //temp
-          temperature = (double)dht.readTemperature();
+          msgTemperature = rawTemperature;
           state = (state & DATA_MASK) | 8;
           break;
         case 32:
           //humidity
-          humidity = (double)dht.readHumidity();
+          msgHumidity = rawHumidity;
           state = (state & DATA_MASK) | 8;
           break;
         case 64:
           //light
-          brightness = 0;
+          msgBrightness = 0;
           state = (state & DATA_MASK) | 8;
           break;
         case 128:
@@ -129,19 +138,19 @@ void loop() {
         case 16:
           //temp
           Serial.print(F("TEMP "));
-          Serial.print(temperature);
+          Serial.print(msgTemperature);
           Serial.println(F(" END"));
           break;
         case 32:
           //humidity
           Serial.print(F("HUMI "));
-          Serial.print(humidity);
+          Serial.print(msgHumidity);
           Serial.println(F(" END"));
           break;
         case 64:
           //light
           Serial.print(F("LUMI "));
-          Serial.print(brightness);
+          Serial.print(msgBrightness);
           Serial.println(F(" END"));
           break;
         case 128:
@@ -164,5 +173,14 @@ void loop() {
       Serial.println(F("ERROR: in main"));
       break;
   }
+}
+
+int ram(){
+  extern int __heap_start, *__brkval; 
+  int v; 
+  //Serial.print(F("RAM:\t"));
+  //Serial.print((int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval)); 
+  //Serial.println(F(" b"));
+  return ((int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval));
 }
 
