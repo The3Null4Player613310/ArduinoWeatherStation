@@ -1,0 +1,24 @@
+node
+	simple data gathering system with three data commands and two protocol commands
+	commands
+		get temp
+			gets temperuature celsuis
+		get humi
+			gets humidity (unknown units)
+		get lumi
+			gets a relitive value of light for refrence purposes
+		ack
+			acknolegd command sent for when data is recieved sucessfully
+		nack
+			not acknoleged sent when parity has faild or the command has returned an unexptected result
+	difficulties
+		the dht11 fails to record temperatures below 0
+			fix: add lm35 for use with sub zero temperatures
+			since the lm35 is roughly proportional to the dht11 with the only draw back being the 
+			resolution we are able to find the approximate value by using the dht11 to configure the lm35 multiplier and offset
+		case was made with little room for new shield
+			fix: the 3d printed case we mmade didnt have quite enougth room for the shield so we drilled some holes for the headers
+		memory over flows
+			fix: we found refrence material to find the number of free bits of memory in the arduino and made leaky functions aware 
+			of this so that they wouldnt overflow the memory
+		

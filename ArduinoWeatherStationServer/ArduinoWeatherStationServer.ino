@@ -190,6 +190,9 @@ void correctTime() {
   unsigned long timeNTP = highWord << 16 | lowWord;
   Udp.stop();
   //Serial.println(timeNTP);
+  dateY = (timeNTP / 31557600);
+  dateM = ();
+  dateD = (timeNTP / 86400) %  
   timeH = (timeNTP / 3600) % 24;
   timeM = (timeNTP / 60) % 60;
   timeS = (timeNTP % 60);

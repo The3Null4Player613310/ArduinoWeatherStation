@@ -4,7 +4,8 @@
 #include <LiquidCrystal_I2C.h>
 
 
-#define LSV_PIN 3
+#define LSV_PIN A0
+#define LMT_PIN A1
 #define DHT_PIN 2
 #define DHT_TYPE DHT11
 
@@ -59,7 +60,8 @@ void loop() {
         state = (state & DATA_MASK) | 2;
 
       //update raw values
-      rawTemperature = dht.readTemperature();
+      Serial.println(String() + (double)dht.readTemperature() + " " + (analogRead(LMT_PIN) * (500.0 / 1024.0)) + " " + (abs((analogRead(LMT_PIN) * (-500.0 / 1024.0))-(double)dht.readTemperature())-40));
+      rawTemperature = ((double)dht.readTemperature());// + (analogRead(LMT_PIN) * (500.0 / 1024.0) - 50.0);
       rawHumidity = dht.readHumidity();
       rawBrightness = analogRead(LSV_PIN);
 
