@@ -73,7 +73,7 @@ void loop() {
       //receiving
       input = "";
       while (!(Serial.peek() == '\r' || Serial.peek() == '\n')) {
-        if (((Serial.peek() != -1) && !(Serial.peek() == '\r' || Serial.peek() == '\n')) and (ram()>64))
+        if (((Serial.peek() != -1) && !(Serial.peek() == '\r' || Serial.peek() == '\n')) and (ram()>256))//leak protection
           input = input + (char)Serial.read();
       }
       while (Serial.peek() == '\r' || Serial.peek() == '\n') {
