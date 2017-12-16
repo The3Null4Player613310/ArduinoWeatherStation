@@ -1,0 +1,15 @@
+OUTLINE FOR NODE: 
+
+. Purpose / functionality 
+. components functionality 
+. connections / schematics 
+. code functionality 
+.Challenges / difficulties 
+
+OUTLINE FOR SERVER: 
+
+. Purpose / functionality 
+. components functionality 
+. connections / schematics 
+. code functionality 
+.Challenges / difficulties 
