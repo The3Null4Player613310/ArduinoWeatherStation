@@ -5,7 +5,6 @@
 
 
 #define LSV_PIN A0
-#define LMT_PIN A1
 #define DHT_PIN 2
 #define DHT_TYPE DHT11
 
@@ -47,6 +46,10 @@ void setup() {
   //setup lcd
   lcd.init();
   lcd.backlight();
+  lcd.setCursor(0, 0);
+  lcd.print("TEMP: ");
+  lcd.setCursor(0, 1);
+  lcd.print("HUMI: ");
 }
 
 void loop() {
@@ -60,21 +63,22 @@ void loop() {
         state = (state & DATA_MASK) | 2;
 
       //update raw values
-      Serial.println(String() + (double)dht.readTemperature() + " " + (analogRead(LMT_PIN) * (500.0 / 1024.0)) + " " + (abs((analogRead(LMT_PIN) * (-500.0 / 1024.0))-(double)dht.readTemperature())-40));
-      rawTemperature = ((double)dht.readTemperature());// + (analogRead(LMT_PIN) * (500.0 / 1024.0) - 50.0);
+      rawTemperature = ((double)dht.readTemperature());
       rawHumidity = dht.readHumidity();
       rawBrightness = analogRead(LSV_PIN);
 
       //update display
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print(F("TEMP: "));
+      //lcd.clear();
+      lcd.setCursor(6, 0);
+      lcd.print("   ");
+      lcd.setCursor(6, 0);
       lcd.print(rawTemperature);
-      lcd.setCursor(0, 1);
-      lcd.print(F("HUMI: "));
+      lcd.setCursor(6, 1);
+      lcd.print("   ");
+      lcd.setCursor(6, 1);
       lcd.print(rawHumidity);
       //lcd.println(brightness);
-      delay(250);
+      delay(200);
       break;
     case 2:
       //receiving
