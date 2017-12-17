@@ -141,15 +141,15 @@ void setup() {
 void loop() {
   tickClock();
   updateClockDisplay();
-    if (client.connect(nodeA, 6432)) {
-      Serial.println("connected");
-      //get temp
-      Serial.println(getClientData("get temp"));
-      //get humi
-      Serial.println(getClientData("get humi"));
-      //get lumi
-      Serial.println(getClientData("get lumi"));
-    } else Serial.println("connectionfailed");
+  if (client.connect("47.54.204.157", 6432)) {
+    Serial.println("connected");
+    //get temp
+    Serial.println(getClientData("get temp"));
+    //get humi
+    Serial.println(getClientData("get humi"));
+    //get lumi
+    Serial.println(getClientData("get lumi"));
+  } else Serial.println("connectionfailed");
 
   if (client) {
     client.stop();
@@ -174,6 +174,8 @@ String getClientData(String input) {
   while (!(client.peek() == '\r' || client.peek() == '\n')) {
     if (((client.peek() != -1) && !(client.peek() == '\r' || client.peek() == '\n')) and (ram() > 256)) //leak protection
       output = output + (char)client.read();
+    else if(ram() <= 256)
+      break;
   }
   while (client.peek() == '\r' || client.peek() == '\n') {
     delay(10);
