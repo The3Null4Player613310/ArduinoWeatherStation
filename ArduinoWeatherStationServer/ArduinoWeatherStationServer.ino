@@ -12,9 +12,9 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
-#define RST_PIN A0
+#define CLK_PIN A0
 #define DAT_PIN A1
-#define CLK_PIN A2
+#define RST_PIN A2
 #define ETH_PIN 10
 #define SDC_PIN 4
 #define IRR_PIN 22
