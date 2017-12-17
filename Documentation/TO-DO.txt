@@ -13,3 +13,6 @@ OUTLINE FOR SERVER:
 . connections / schematics 
 . code functionality 
 .Challenges / difficulties 
+
+
+TOKEN KEY: "936460945966161921-LjkA9TgpECJtLK7I6umoCWk66If8qE7");
