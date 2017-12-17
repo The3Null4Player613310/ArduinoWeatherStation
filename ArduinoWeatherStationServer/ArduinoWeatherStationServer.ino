@@ -50,7 +50,7 @@ EthernetClient client;
 EthernetUDP Udp;
 
 //network addresses
-byte node[][4] = {{47, 54, 204, 157}};
+IPAddress nodeA(47, 54, 204, 157);
 
 //display vars
 LiquidCrystal_I2C lcd(0x38, 20, 4);
@@ -107,7 +107,7 @@ void setup() {
   while (!Serial);
   lcd.init();
   setSDC();
-  //while (!SD.begin(4));
+  while (!SD.begin(4));
   setETH();
   if (Ethernet.begin(mac) == 0) {
     Ethernet.begin(mac, ip, dns1, gateway, subnet);
@@ -141,27 +141,20 @@ void setup() {
 void loop() {
   tickClock();
   updateClockDisplay();
+    if (client.connect(nodeA, 6432)) {
+      Serial.println("connected");
+      //get temp
+      Serial.println(getClientData("get temp"));
+      //get humi
+      Serial.println(getClientData("get humi"));
+      //get lumi
+      Serial.println(getClientData("get lumi"));
+    } else Serial.println("connectionfailed");
 
-  //if ((true || timeM % 5 == 0) && timeS == 0 && false )
-  //{
-  //for (int i = 0; i < 2; i++)
-  //if (client.connect(IPAddress(node[i][0], node[i][1], node[i][2], node[i][3]), 80)) {
-  //Serial.println("connected");
-  //client.println("REQ STATUS");
-  //do {
-  //char c = client.read();
-  //Serial.print(c);
-  //delay(10);
-  //} //while (client.available());
-  //}
-  //}
-
-
-
-  //if (client) {
-  //  client.stop();
-  //  //Serial.println("client disconnected");
-  //}
+  if (client) {
+    client.stop();
+    Serial.println("client disconnected");
+  }
 }
 
 void writeData(int temp, int humi, int lumi) {
@@ -173,6 +166,20 @@ void writeData(int temp, int humi, int lumi) {
   } else {
     Serial.println("error opening test.txt");
   }
+}
+
+String getClientData(String input) {
+  client.println(input);
+  String output = "";
+  while (!(client.peek() == '\r' || client.peek() == '\n')) {
+    if (((client.peek() != -1) && !(client.peek() == '\r' || client.peek() == '\n')) and (ram() > 256)) //leak protection
+      output = output + (char)client.read();
+  }
+  while (client.peek() == '\r' || client.peek() == '\n') {
+    delay(10);
+    client.read();
+  }
+  return output;
 }
 
 String getIrCommand() {
@@ -211,7 +218,7 @@ void tickClock() {
     timeM = timeT.min;
   if ((abs(timeH - timeT.hr) < 2) || ((timeH == 23) && (timeT.hr == 0)))
     timeH = timeT.hr;
-  Serial.println(String(' ') + timeT.hr + " " + timeT.min + " " + timeT.sec + " " + timeH + " " + timeM + " " + timeS);
+  //Serial.println(String(' ') + timeT.hr + " " + timeT.min + " " + timeT.sec + " " + timeH + " " + timeM + " " + timeS);
 }
 
 void postToTwitter(String msg) {
@@ -293,4 +300,13 @@ void sendNTPpacket(char* address) {
   Udp.beginPacket(address, 123);
   Udp.write(packetBuffer, NTP_PACKET_SIZE);
   Udp.endPacket();
+}
+
+int ram() {
+  extern int __heap_start, *__brkval;
+  int v;
+  //Serial.print(F("RAM:\t"));
+  //Serial.print((int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval));
+  //Serial.println(F(" b"));
+  return ((int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval));
 }
