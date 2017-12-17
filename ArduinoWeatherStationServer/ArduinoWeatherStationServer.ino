@@ -45,9 +45,11 @@ IPAddress ip(192, 168, 0, 116);
 IPAddress dns1(137, 149, 3, 1);
 IPAddress gateway(192, 168, 0, 1);
 IPAddress subnet(255, 255, 255, 0);
-EthernetServer server(DATA_PORT);
+//EthernetServer server(DATA_PORT);
 EthernetClient client;
 EthernetUDP Udp;
+
+int node[] = {47,54,204,157};
 
 //network addresses
 IPAddress nodeA(47, 54, 204, 157);
@@ -59,27 +61,27 @@ LiquidCrystal_I2C lcd(0x38, 20, 4);
 IRrecv irrecv(IRR_PIN);
 decode_results irResults;
 String button[] = {
-  "", "ch-", //ch-
-  "", "ch", //ch
-  "", "ch+", //ch+
-  "", "prev", //prev
-  "", "next", //next
-  "", "play/pause", //play/pause
-  "", "-", //-
-  "", "+", //+
-  "", "eq", //eq
-  "", "100+", //100+
-  "", "200+", //200+
-  "", "0", //0
-  "", "1", //1
-  "", "2", //2
-  "", "3", //3
-  "", "4", //4
-  "", "5", //5
-  "", "6", //6
-  "", "7", //7
-  "", "8", //8
-  "", "9", //9
+  "fff25d", "ch-", //ch-
+  "ff629d", "ch", //ch
+  "ffe21d", "ch+", //ch+
+  "ff22dd", "prev", //prev
+  "ff02fd", "next", //next
+  "ffc23d", "play/pause", //play/pause
+  "ffe01f", "-", //-
+  "ffa857", "+", //+
+  "ff906f", "eq", //eq
+  "ff6897", "100+", //100+
+  "ffb04f", "200+", //200+
+  "ff6897", "0", //0
+  "ff30cf", "1", //1
+  "ff18e7", "2", //2
+  "ff7a85", "3", //3
+  "ff10ef", "4", //4
+  "ff38c7", "5", //5
+  "ff5885", "6", //6
+  "ff42bd", "7", //7
+  "ff4ab5", "8", //8
+  "ff4ab5", "9", //9
 };
 
 //state machiene vars
@@ -98,7 +100,7 @@ byte state = 1;
 
 
 void setup() {
-  pinMode(SDC_PIN, OUTPUT);
+  //pinMode(SDC_PIN, OUTPUT);
   pinMode(ETH_PIN, OUTPUT);
 
   //start serial connections
@@ -106,13 +108,13 @@ void setup() {
   Serial1.begin(9600);
   while (!Serial);
   lcd.init();
-  setSDC();
-  while (!SD.begin(4));
+  //setSDC();
+  //while (!SD.begin(4));
   setETH();
   if (Ethernet.begin(mac) == 0) {
     Ethernet.begin(mac, ip, dns1, gateway, subnet);
   }
-  server.begin();
+  //server.begin();
 
   //correct time on first boot
   correctTime();
@@ -141,7 +143,7 @@ void setup() {
 void loop() {
   tickClock();
   updateClockDisplay();
-  if (client.connect("47.54.204.157", 6432)) {
+  if (client.connect(node, 6432)) {
     Serial.println("connected");
     //get temp
     Serial.println(getClientData("get temp"));
@@ -176,11 +178,13 @@ String getClientData(String input) {
       output = output + (char)client.read();
     else if(ram() <= 256)
       break;
+      Serial.println(output);
   }
   while (client.peek() == '\r' || client.peek() == '\n') {
     delay(10);
     client.read();
   }
+  Serial.println("bing");
   return output;
 }
 
@@ -241,12 +245,12 @@ void postToTwitter(String msg) {
 }
 
 void setETH() {
-  digitalWrite(SDC_PIN, HIGH);
+  //digitalWrite(SDC_PIN, HIGH);
   digitalWrite(ETH_PIN, LOW);
 }
 
 void setSDC() {
-  digitalWrite(SDC_PIN, LOW);
+  //digitalWrite(SDC_PIN, LOW);
   digitalWrite(ETH_PIN, HIGH);
 }
 
