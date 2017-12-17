@@ -1,3 +1,7 @@
+#include <boarddefs.h>
+#include <IRremote.h>
+#include <IRremoteInt.h>
+#include <ir_Lego_PF_BitStreamEncoder.h>
 #include <EasyNTPClient.h>
 #include <Twitter.h>
 #include <Ethernet.h>
@@ -11,23 +15,31 @@
 #define RST_PIN A0
 #define DAT_PIN A1
 #define CLK_PIN A2
-#define ETH_CS 10
-#define SDC_CS 4
+#define ETH_PIN 10
+#define SDC_PIN 4
+#define IRR_PIN 22
 
+// define ports
 #define DATA_PORT 6432
 #define NTP_PORT 8888
 
+//ntp related vars
 const int NTP_PACKET_SIZE = 48;
-byte packetBuffer[ NTP_PACKET_SIZE];
+byte packetBuffer[NTP_PACKET_SIZE];
 
+//rtc related vars
 DS1302 rtc(RST_PIN, DAT_PIN, CLK_PIN);
 short timeH = 0, timeM = 0, timeS = 0;
+short dateD = 0, dateM = 0, dateY = 0;
 long timeU = 0;
 
+//file vars
 File curFile;
 
+//twitter vars
 Twitter twitter("");
 
+//networking vars
 byte mac[] = {0x78, 0x7B, 0x8A, 0xB4, 0xA6, 0xBA};
 IPAddress ip(192, 168, 0, 116);
 IPAddress dns1(137, 149, 3, 1);
@@ -37,10 +49,40 @@ EthernetServer server(DATA_PORT);
 EthernetClient client;
 EthernetUDP Udp;
 
-byte node[][4] = {{192,168,137,161}};
+//network addresses
+byte node[][4] = {{47, 54, 204, 157}};
 
+//display vars
 LiquidCrystal_I2C lcd(0x38, 20, 4);
 
+//ir remote vars
+IRrecv irrecv(IRR_PIN);
+decode_results irResults;
+String button[] = {
+  "", "ch-", //ch-
+  "", "ch", //ch
+  "", "ch+", //ch+
+  "", "prev", //prev
+  "", "next", //next
+  "", "play/pause", //play/pause
+  "", "-", //-
+  "", "+", //+
+  "", "eq", //eq
+  "", "100+", //100+
+  "", "200+", //200+
+  "", "0", //0
+  "", "1", //1
+  "", "2", //2
+  "", "3", //3
+  "", "4", //4
+  "", "5", //5
+  "", "6", //6
+  "", "7", //7
+  "", "8", //8
+  "", "9", //9
+};
+
+//state machiene vars
 byte state = 1;
 //state vars
 //error     0000 0000 000
@@ -56,14 +98,16 @@ byte state = 1;
 
 
 void setup() {
-  pinMode(SDC_CS, OUTPUT);
-  pinMode(ETH_CS, OUTPUT);
+  pinMode(SDC_PIN, OUTPUT);
+  pinMode(ETH_PIN, OUTPUT);
 
+  //start serial connections
   Serial.begin(9600);
+  Serial1.begin(9600);
   while (!Serial);
   lcd.init();
   setSDC();
-  while (!SD.begin(4));
+  //while (!SD.begin(4));
   setETH();
   if (Ethernet.begin(mac) == 0) {
     Ethernet.begin(mac, ip, dns1, gateway, subnet);
@@ -72,6 +116,9 @@ void setup() {
 
   //correct time on first boot
   correctTime();
+
+  //start ir reciever
+  irrecv.enableIRIn();
 
   //setup display
   lcd.backlight();
@@ -97,30 +144,49 @@ void loop() {
 
   //if ((true || timeM % 5 == 0) && timeS == 0 && false )
   //{
-    //for (int i = 0; i < 2; i++)
-      //if (client.connect(IPAddress(node[i][0], node[i][1], node[i][2], node[i][3]), 80)) {
-        //Serial.println("connected");
-        //client.println("REQ STATUS");
-        //do {
-          //char c = client.read();
-          //Serial.print(c);
-          //delay(10);
-        //} //while (client.available());
-      //}
+  //for (int i = 0; i < 2; i++)
+  //if (client.connect(IPAddress(node[i][0], node[i][1], node[i][2], node[i][3]), 80)) {
+  //Serial.println("connected");
+  //client.println("REQ STATUS");
+  //do {
+  //char c = client.read();
+  //Serial.print(c);
+  //delay(10);
+  //} //while (client.available());
+  //}
   //}
 
-  //curFile = SD.open("test.txt", FILE_WRITE);
-  //if (curFile) {
-  //curFile.println();
-  //   curFile.close();
-  //} else {
-  //   Serial.println("error opening test.txt");
-  // }
+
 
   //if (client) {
   //  client.stop();
   //  //Serial.println("client disconnected");
   //}
+}
+
+void writeData(int temp, int humi, int lumi) {
+  curFile = SD.open("test.txt", FILE_WRITE);
+  if (curFile) {
+    curFile.println();
+    curFile.println(String() + temp + ", " + humi + ", " + lumi);
+    curFile.close();
+  } else {
+    Serial.println("error opening test.txt");
+  }
+}
+
+String getIrCommand() {
+  if (irrecv.decode(&irResults)) {
+    String code = String(irResults.value, HEX);
+    Serial.println(code);
+    //iterate through list and find match then return command;
+    for (int i = 0; i < 21; i++)
+      if (code.equalsIgnoreCase(button[i * 2]))
+      {
+        irrecv.resume(); // Receive the next value
+        return button[i * 2 + 1];
+      }
+  }
 }
 
 void updateClockDisplay() {
@@ -166,13 +232,13 @@ void postToTwitter(String msg) {
 }
 
 void setETH() {
-  digitalWrite(SDC_CS, HIGH);
-  digitalWrite(ETH_CS, LOW);
+  digitalWrite(SDC_PIN, HIGH);
+  digitalWrite(ETH_PIN, LOW);
 }
 
 void setSDC() {
-  digitalWrite(SDC_CS, LOW);
-  digitalWrite(ETH_CS, HIGH);
+  digitalWrite(SDC_PIN, LOW);
+  digitalWrite(ETH_PIN, HIGH);
 }
 
 void correctTime() {
@@ -191,8 +257,8 @@ void correctTime() {
   Udp.stop();
   //Serial.println(timeNTP);
   dateY = (timeNTP / 31557600);
-  dateM = ();
-  dateD = (timeNTP / 86400) %  
+  dateM = (0);
+  dateD = (timeNTP / 86400);
   timeH = (timeNTP / 3600) % 24;
   timeM = (timeNTP / 60) % 60;
   timeS = (timeNTP % 60);
@@ -218,7 +284,7 @@ void sendNTPpacket(char* address) {
   packetBuffer[1] = 0; //stratum/level
   packetBuffer[2] = 6; //polling interveral
   packetBuffer[3] = 0xEC; //percision
-  packetBuffer[12]  = 49; 
+  packetBuffer[12]  = 49;
   packetBuffer[13]  = 0x4E;
   packetBuffer[14]  = 49;
   packetBuffer[15]  = 52;
