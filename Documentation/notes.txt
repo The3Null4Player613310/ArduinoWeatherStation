@@ -22,3 +22,8 @@ node
 			fix: we found refrence material to find the number of free bits of memory in the arduino and made leaky functions aware 
 			of this so that they wouldnt overflow the memory
 		
+
+server
+	rtc
+		problemes
+			rtc values were not percice but were mostly accurate so we created three varibles to make sure the value of the rtc were sane
