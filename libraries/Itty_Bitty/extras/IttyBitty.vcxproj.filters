@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="__vm">
+      <UniqueIdentifier>{0ad123e6-224e-4082-b78f-27c859da2c2f}</UniqueIdentifier>
+      <Extensions>vsarduino.h</Extensions>
+    </Filter>
+    <Filter Include="Metadata">
+      <UniqueIdentifier>{0f068f51-3d28-425e-9cef-26f7bd5557c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Examples">
+      <UniqueIdentifier>{0be123e6-224e-4082-b78f-27c859da2c2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;inc;cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Core\_micro-api-readonly">
+      <UniqueIdentifier>{92c607cd-fe76-4cde-bfd9-a695cff3e61d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\_micro-api-readonly\core">
+      <UniqueIdentifier>{be1d5718-d3e7-46a4-8a60-61c3e826066a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\_micro-api-readonly\variants">
+      <UniqueIdentifier>{ec45e1c1-2bc5-48fd-8556-80658ce03105}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\_micro-api-readonly\variants\eightanaloginputs">
+      <UniqueIdentifier>{427384a0-9e39-458c-a1d6-8df353ccd2ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\_micro-api-readonly\libraries">
+      <UniqueIdentifier>{90bf7457-1d1e-4f3d-9200-6a00b9f14fab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Communication">
+      <UniqueIdentifier>{de4184cf-f5e1-47bc-b32b-efac5abb35ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Control">
+      <UniqueIdentifier>{8a5552d2-2110-4e01-8378-e1666b5f9890}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bits &amp; Bytes">
+      <UniqueIdentifier>{04ef9d8a-1695-4d3c-aca9-0eb7f211e03f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{54dbf06e-cb14-4f36-86e0-73c9d8a1e1d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database">
+      <UniqueIdentifier>{0d299d15-6c23-4f0a-b817-6fa42bc4004c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Display">
+      <UniqueIdentifier>{0d299d15-6c23-4f0a-b817-6fa42bc4004d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IO">
+      <UniqueIdentifier>{10cba6eb-f737-4cce-aca7-8f64dfec2152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MenUI">
+      <UniqueIdentifier>{22cba6eb-f737-4cce-aca7-8f64dfec2152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Storage">
+      <UniqueIdentifier>{21e31132-df64-4790-851f-ec3b7e68e770}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Types">
+      <UniqueIdentifier>{64ceb909-aff6-42de-a06c-a0c0a8f6fda1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util">
+      <UniqueIdentifier>{5ae123e6-224e-4082-b78f-27c859da2c2f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\keywords.txt">
+      <Filter>_Metadata</Filter>
+    </None>
+    <None Include="..\library.properties">
+      <Filter>_Metadata</Filter>
+    </None>
+    <None Include="..\LICENSE">
+      <Filter>_Metadata</Filter>
+    </None>
+    <None Include="..\README.md">
+      <Filter>_Metadata</Filter>
+    </None>
+    <None Include="IttyBitty.ino" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\SD.h">
+      <Filter>_Libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utility\FatStructs.h">
+      <Filter>_Libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utility\Sd2Card.h">
+      <Filter>_Libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utility\Sd2PinMap.h">
+      <Filter>_Libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utility\SdFat.h">
+      <Filter>_Libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utility\SdFatmainpage.h">
+      <Filter>_Libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utility\SdFatUtil.h">
+      <Filter>_Libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utility\SdInfo.h">
+      <Filter>_Libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Wire.h">
+      <Filter>_Libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utility\twi.h">
+      <Filter>_Libs</Filter>
+    </ClInclude>
+    <ClInclude Include="__vm\.IttyBitty.vsarduino.h">
+      <Filter>__vm</Filter>
+    </ClInclude>
+    <ClCompile Include="..\IttyBitty.h">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_base.h">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_slim.h">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClInclude Include="..\IttyBitty_bits.h">
+      <Filter>Bits &amp; Bytes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_bytes.h">
+      <Filter>Bits &amp; Bytes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_registers.h">
+      <Filter>Bits &amp; Bytes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_messages.h">
+      <Filter>Communication</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_interrupts.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_timers.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_datum.h">
+      <Filter>Data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_fields.h">
+      <Filter>Data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_params.h">
+      <Filter>Data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_values.h">
+      <Filter>Data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_DB.h">
+      <Filter>Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_DB_table_defs.h">
+      <Filter>Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_DB_tables.h">
+      <Filter>Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_LCD_big.h">
+      <Filter>Display</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_LCD_big_decl.h">
+      <Filter>Display</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_LCD_chars.h">
+      <Filter>Display</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_LCD_extensions.h">
+      <Filter>Display</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_LCD_extensions_decl.h">
+      <Filter>Display</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_LCD_I2C.h">
+      <Filter>Display</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_GPIO.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_GPIO_arduino.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_GPIO_portpins.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_LED.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_signals.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_wavetables.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_MenUI.h">
+      <Filter>MenUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_UI_display.h">
+      <Filter>MenUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_UI_display_adapters.h">
+      <Filter>MenUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_UI_elements.h">
+      <Filter>MenUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_UI_fields.h">
+      <Filter>MenUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_UI_field_decorators.h">
+      <Filter>MenUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_UI_menus.h">
+      <Filter>MenUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_UI_nav.h">
+      <Filter>MenUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_UI_nav_adapters.h">
+      <Filter>MenUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_UI_options.h">
+      <Filter>MenUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_storage.h">
+      <Filter>Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_storage_adapters.h">
+      <Filter>Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_storage_adapter_sd.h">
+      <Filter>Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_EEPROM_I2C.h">
+      <Filter>Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_aliases.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_expressions.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_type_traits.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\avr_cpunames.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_info.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_print.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IttyBitty_util.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\abi.cpp">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\CDC.cpp">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial.cpp">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial0.cpp">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial1.cpp">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial2.cpp">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial3.cpp">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\hooks.c">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\IPAddress.cpp">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\main.cpp">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\new.cpp">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\PluggableUSB.cpp">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Print.cpp">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Stream.cpp">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\Tone.cpp">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\USBCore.cpp">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WInterrupts.c">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring.c">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring_analog.c">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring_digital.c">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring_pulse.c">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\wiring_shift.c">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WMath.cpp">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\WString.cpp">
+      <Filter>Core\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SD.cpp">
+      <Filter>_Libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\File.cpp">
+      <Filter>_Libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\utility\Sd2Card.c">
+      <Filter>_Libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\utility\Sd2File.c">
+      <Filter>_Libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\utility\SdVolume.c">
+      <Filter>_Libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Wire.cpp">
+      <Filter>_Libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\utility\twi.c">
+      <Filter>_Libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_bits.cpp">
+      <Filter>Bits &amp; Bytes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_bytes.cpp">
+      <Filter>Bits &amp; Bytes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_messages.cpp">
+      <Filter>Communication</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_interrupts.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_timers.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_datum.cpp">
+      <Filter>Data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_fields.cpp">
+      <Filter>Data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_params.cpp">
+      <Filter>Data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_values.cpp">
+      <Filter>Data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_DB.cpp">
+      <Filter>Database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_DB_table_defs.cpp">
+      <Filter>Database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_DB_tables.cpp">
+      <Filter>Database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_LCD_big.cpp">
+      <Filter>Display</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_LCD_big_font.cpp">
+      <Filter>Display</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_LCD_chars.cpp">
+      <Filter>Display</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_LCD_extensions.cpp">
+      <Filter>Display</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_LCD_I2C.cpp">
+      <Filter>Display</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_GPIO.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_LED.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_signals.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_MenUI.cpp">
+      <Filter>MenUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_UI_display.cpp">
+      <Filter>MenUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_UI_display_adapters.cpp">
+      <Filter>MenUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_UI_elements.cpp">
+      <Filter>MenUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_UI_fields.cpp">
+      <Filter>MenUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_UI_field_decorators.cpp">
+      <Filter>MenUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_UI_menus.cpp">
+      <Filter>MenUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_UI_nav.cpp">
+      <Filter>MenUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_UI_nav_adapters.cpp">
+      <Filter>MenUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_UI_options.cpp">
+      <Filter>MenUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_EEPROM_I2C.cpp">
+      <Filter>Storage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_storage.cpp">
+      <Filter>Storage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_storage_adapters.cpp">
+      <Filter>Storage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_storage_adapter_sd.cpp">
+      <Filter>Storage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_info.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IttyBitty_print.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

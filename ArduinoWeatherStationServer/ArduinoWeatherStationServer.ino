@@ -1,12 +1,9 @@
-#include <boarddefs.h>
 #include <IRremote.h>
-#include <IRremoteInt.h>
-#include <ir_Lego_PF_BitStreamEncoder.h>
+#include <RedMP3HARDWARE.h>
 #include <EasyNTPClient.h>
 #include <Twitter.h>
 #include <Ethernet.h>
 #include <EthernetUdp.h>
-#include <SD.h>
 #include <SPI.h>
 #include <DS1302.h>
 #include <Wire.h>
@@ -18,6 +15,29 @@
 #define ETH_PIN 10
 #define SDC_PIN 4
 #define IRR_PIN 22
+
+//define button codes
+#define BTN_CHM 1045085//"fff25d" //ch-
+#define BTN_CH 16736925//"ff629d" //ch
+#define BTN_CHP 16769565//"ffe21d" //ch+
+#define BTN_PREV 16720605//"ff22dd" //prev
+#define BTN_NEXT 16712445//"ff02fd" //next
+#define BTN_PLAYPAUSE 16761405//"ffc23d" //play/pause
+#define BTN_M 16769055//"ffe01f" //-
+#define BTN_P 16754775//"ffa857" //+
+#define BTN_EQ 16748655//"ff906f" //eq
+#define BTN_100P 16738407//"ff6867" //100+
+#define BTN_200P 16756815//"ffb04f" //200+
+#define BTN_0 16738455//"ff6897" //0
+#define BTN_1 16724175//"ff30cf" //1
+#define BTN_2 16718055//"ff18e7" //2
+#define BTN_3 16743045//"ff7a85" //3
+#define BTN_4 16716015//"ff10ef" //4
+#define BTN_5 16726215//"ff38c7" //5
+#define BTN_6 16734885//"ff5aa5" //6//re
+#define BTN_7 16728765//"ff42bd" //7
+#define BTN_8 16730805//"ff4ab5" //8
+#define BTN_9 16732845//"ff52ad" //9
 
 // define ports
 #define DATA_PORT 6432
@@ -33,9 +53,6 @@ short timeH = 0, timeM = 0, timeS = 0;
 short dateD = 0, dateM = 0, dateY = 0;
 long timeU = 0;
 
-//file vars
-File curFile;
-
 //twitter vars
 Twitter twitter("");
 
@@ -48,41 +65,17 @@ IPAddress subnet(255, 255, 255, 0);
 //EthernetServer server(DATA_PORT);
 EthernetClient client;
 EthernetUDP Udp;
-
-int node[] = {47,54,204,157};
-
-//network addresses
-IPAddress nodeA(47, 54, 204, 157);
+byte server[] = {47, 54, 204, 157};
 
 //display vars
 LiquidCrystal_I2C lcd(0x38, 20, 4);
 
 //ir remote vars
-IRrecv irrecv(IRR_PIN);
+IRrecv IR(IRR_PIN);
 decode_results irResults;
-String button[] = {
-  "fff25d", "ch-", //ch-
-  "ff629d", "ch", //ch
-  "ffe21d", "ch+", //ch+
-  "ff22dd", "prev", //prev
-  "ff02fd", "next", //next
-  "ffc23d", "play/pause", //play/pause
-  "ffe01f", "-", //-
-  "ffa857", "+", //+
-  "ff906f", "eq", //eq
-  "ff6897", "100+", //100+
-  "ffb04f", "200+", //200+
-  "ff6897", "0", //0
-  "ff30cf", "1", //1
-  "ff18e7", "2", //2
-  "ff7a85", "3", //3
-  "ff10ef", "4", //4
-  "ff38c7", "5", //5
-  "ff5885", "6", //6
-  "ff42bd", "7", //7
-  "ff4ab5", "8", //8
-  "ff4ab5", "9", //9
-};
+
+//mp3 vars
+MP3 mp3;// just ask for the library we got it.
 
 //state machiene vars
 byte state = 1;
@@ -105,10 +98,10 @@ void setup() {
 
   //start serial connections
   Serial.begin(9600);
-  Serial1.begin(9600);
+  mp3.begin();
   while (!Serial);
   lcd.init();
-  //setSDC();
+  setSDC();
   //while (!SD.begin(4));
   setETH();
   if (Ethernet.begin(mac) == 0) {
@@ -120,7 +113,13 @@ void setup() {
   correctTime();
 
   //start ir reciever
-  irrecv.enableIRIn();
+  IR.enableIRIn();
+
+  //setup mp3
+  delay(500);
+  mp3.setVolume(0x1e); //safe max is 0x1e
+  delay(50);
+  mp3.playWithFileName(3, 2);
 
   //setup display
   lcd.backlight();
@@ -141,9 +140,14 @@ void setup() {
 //note: twitter every 30mins
 
 void loop() {
+  //ram();
+  //Serial.println("bing");
   tickClock();
   updateClockDisplay();
-  if (client.connect(node, 6432)) {
+  parseIRCommand();
+  /*
+  if (client.connect(server, 6432)) {
+    mp3.playWithFileName(4, 25);
     Serial.println("connected");
     //get temp
     Serial.println(getClientData("get temp"));
@@ -155,19 +159,9 @@ void loop() {
 
   if (client) {
     client.stop();
+    mp3.stopPlay();
     Serial.println("client disconnected");
-  }
-}
-
-void writeData(int temp, int humi, int lumi) {
-  curFile = SD.open("test.txt", FILE_WRITE);
-  if (curFile) {
-    curFile.println();
-    curFile.println(String() + temp + ", " + humi + ", " + lumi);
-    curFile.close();
-  } else {
-    Serial.println("error opening test.txt");
-  }
+  }*/
 }
 
 String getClientData(String input) {
@@ -176,9 +170,9 @@ String getClientData(String input) {
   while (!(client.peek() == '\r' || client.peek() == '\n')) {
     if (((client.peek() != -1) && !(client.peek() == '\r' || client.peek() == '\n')) and (ram() > 256)) //leak protection
       output = output + (char)client.read();
-    else if(ram() <= 256)
+    else if (ram() <= 256)
       break;
-      Serial.println(output);
+    Serial.println(output);
   }
   while (client.peek() == '\r' || client.peek() == '\n') {
     delay(10);
@@ -188,18 +182,85 @@ String getClientData(String input) {
   return output;
 }
 
-String getIrCommand() {
-  if (irrecv.decode(&irResults)) {
-    String code = String(irResults.value, HEX);
-    Serial.println(code);
+void parseIRCommand() {
+  if (IR.decode(&irResults)) {
+
+    //String code = String(irResults.value, HEX);
+    //Serial.println(code);
     //iterate through list and find match then return command;
-    for (int i = 0; i < 21; i++)
-      if (code.equalsIgnoreCase(button[i * 2]))
-      {
-        irrecv.resume(); // Receive the next value
-        return button[i * 2 + 1];
-      }
+
+    switch (irResults.value) {
+      case BTN_CHM:
+        break;
+      case BTN_CH:
+        break;
+      case BTN_CHP:
+        break;
+      case BTN_PREV:
+        mp3.previousSong();
+        break;
+      case BTN_NEXT:
+        mp3.nextSong();
+        break;
+      case BTN_PLAYPAUSE:
+        mp3.stopPlay();
+        break;
+      case BTN_M:
+        mp3.volumeDown();
+        break;
+      case BTN_P:
+        mp3.volumeUp();
+        break;
+      case BTN_EQ:
+        break;
+      case BTN_100P:
+        mp3.rewind();
+        break;
+      case BTN_200P:
+        mp3.forward();
+        break;
+      case BTN_0:
+        mp3.playWithFileName(4, 0);
+        break;
+      case BTN_1:
+        mp3.playWithFileName(4, 1);
+        break;
+      case BTN_2:
+        mp3.playWithFileName(4, 2);
+        break;
+      case BTN_3:
+        mp3.playWithFileName(4, 3);
+        break;
+      case BTN_4:
+        mp3.playWithFileName(4, 4);
+        break;
+      case BTN_5:
+        mp3.playWithFileName(4, 5);
+        break;
+      case BTN_6:
+        mp3.playWithFileName(4, 6);
+        break;
+      case BTN_7:
+        mp3.playWithFileName(4, 7);
+        break;
+      case BTN_8:
+        mp3.playWithFileName(4, 8);
+        break;
+      case BTN_9:
+        mp3.playWithFileName(4, 9);
+        break;
+      default:
+        Serial.println(irResults.value, HEX);
+        //Serial.println("val:" + irResults.value);
+        break;
+    }
+    IR.resume();
+    delay(700);
   }
+}
+
+void sayNumber(int num) {
+
 }
 
 void updateClockDisplay() {
@@ -218,13 +279,13 @@ void updateClockDisplay() {
 void tickClock() {
   Time timeT = rtc.time(); // parameterless, returns a Time object
   delay(10);
-  if ((abs(timeS - timeT.sec) < 5) || ((timeS == 59) && (timeT.sec == 0)))
+  if ((abs(timeS - timeT.sec) < 10) || ((timeS == 59) && (timeT.sec == 0)))
     timeS = timeT.sec;
   if ((abs(timeM - timeT.min) < 3) || ((timeM == 59) && (timeT.min == 0)))
     timeM = timeT.min;
   if ((abs(timeH - timeT.hr) < 2) || ((timeH == 23) && (timeT.hr == 0)))
     timeH = timeT.hr;
-  //Serial.println(String(' ') + timeT.hr + " " + timeT.min + " " + timeT.sec + " " + timeH + " " + timeM + " " + timeS);
+  Serial.println(String(' ') + timeT.hr + " " + timeT.min + " " + timeT.sec + " " + timeH + " " + timeM + " " + timeS);
 }
 
 void postToTwitter(String msg) {
@@ -245,12 +306,12 @@ void postToTwitter(String msg) {
 }
 
 void setETH() {
-  //digitalWrite(SDC_PIN, HIGH);
+  digitalWrite(SDC_PIN, HIGH);
   digitalWrite(ETH_PIN, LOW);
 }
 
 void setSDC() {
-  //digitalWrite(SDC_PIN, LOW);
+  digitalWrite(SDC_PIN, LOW);
   digitalWrite(ETH_PIN, HIGH);
 }
 
@@ -297,10 +358,10 @@ void sendNTPpacket(char* address) {
   packetBuffer[1] = 0; //stratum/level
   packetBuffer[2] = 6; //polling interveral
   packetBuffer[3] = 0xEC; //percision
-  packetBuffer[12]  = 49;
-  packetBuffer[13]  = 0x4E;
-  packetBuffer[14]  = 49;
-  packetBuffer[15]  = 52;
+  packetBuffer[12] = 49;
+  packetBuffer[13] = 0x4E;
+  packetBuffer[14] = 49;
+  packetBuffer[15] = 52;
 
   //send packet
   Udp.beginPacket(address, 123);
